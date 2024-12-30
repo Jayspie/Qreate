@@ -1,4 +1,5 @@
 const iso8859 = {// a dict of all iso8859 charcters and their hex codes
+    " ": "20",
     "!": "21",
     '"': "22",
     "#": "23",
@@ -125,6 +126,39 @@ function to_binary(link) {//converts the link into binary
             binary_array.push(hex_binary[bhar]);
         }
     }
-    console.log(binary_array.join(""));
+    if (binary_array.join("").length <= 624) {//checks if theres no more than 624 bits in the binary string
+
+        binary_array.push("0000")//adds the Terminator to the end binary string ------------------------>  | The reason behind it is that there can only be |
+        //                                                                                                 | 78 bytes of characters in a binary string, not |
+        //adding more 0's to make the length a multiple of 8                                               | including the mode, link character count, and  |
+        if (binary_array.join("").length % 8 != 0) {//                                                     | terminator. Now, because there are 8 bits in a |
+            let div = binary_array.join("").length / 8//                                                   | byte, there can only be 624 bits in binary     |
+            let round = Math.round(div)//                                                                  | strings.                                       |
+            let for_length = 0
+
+            if (round > div) {
+                for_length = (round * 8) - binary_array.join("").length
+
+                for (let i = 0; i < for_length; i++) {
+                    binary_array.push(0)
+                }
+                return [binary_array.join(""), link.length]
+            }
+            else {
+                for_length = ((round + 1) * 8) - binary_array.join("").length
+
+                for (let i = 0; i < for_length; i++) {
+                    binary_array.push(0)
+                }
+                return [binary_array.join(""), link.length]
+            }
+        }
+        else {
+            return [binary_array.join(""), link.length]
+        }
+    }
+    else {
+        return "Binary is to big"
+    }
 }
-to_binary("https://www.google.com/");
+console.log(to_binary("https://www.youtube.com/watch?v=ZizmvuZ3EFk&t=529s")[0].length)
