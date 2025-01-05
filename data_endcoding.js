@@ -114,4 +114,99 @@ const hex_binary = {// each hex code and their binary
     E: "1110",
     F: "1111",
 };
-const mode ="0100";
+const mode = "0100";
+
+function data_endcoding(link) {
+
+    let data = [mode]
+
+    let char_binary = [];
+    let num = link.length
+
+    while (num >= 1) {
+        char_binary.push(num % 2)// adds the remainder to char_binary list
+
+        //reassign the num value 
+        num = num / 2
+        if (Number.isInteger(num) == true) {
+            continue
+        }
+        else {
+            num = num - 0.5
+        }
+    }
+
+    if (char_binary.length < 8) {//checks if the binary is 8 character long 
+        let loop = 8 - char_binary.length
+
+        for (let i = 0; i < loop; i++) {// add 0's to binary to make it 8 characters long
+            char_binary.push(0)
+        }
+        data.push(char_binary.reverse().join(""))//-------------
+    }//                                                        |
+    //                                                          =========> reversing the list and making them into one
+    else {//                                                   |
+        data.push(char_binary.reverse().join(""))//-------------
+    }
+
+
+
+
+    let binary_array = [];//           <-----------------------------------------------------------------------------|      
+    let string_array = link.split("");// turns link into an array                                                    |
+    //                                                                                                               |
+    for (let char of string_array) {//converts each charecter from the link into hex code                            | 
+        let hex_array = iso8859[char].split("");//                                                                   |
+        //                                                                                                           |  
+        for (let bhar of hex_array) {//conoverts each hex code into binary and putting them in array called _________|
+            binary_array.push(hex_binary[bhar]);
+        }
+    }
+    data.push(binary_array.join(""))
+    if (data.join("").length <= 636) {//checks if theres no more than 624 bits in the binary string
+
+        binary_array.push("0000")//adds the Terminator to the end binary string ------------------------>  | The reason behind it is that there can only be |
+        //                                                                                                 | 78 bytes of characters in a binary string, not |
+        //adding more 0's to make the length a multiple of 8                                               | including the mode, link character count, and  |
+        if (data.join("").length % 8 != 0) {//                                                             | terminator. Now, because there are 8 bits in a |
+            let div = data.join("").length / 8//                                                           | byte, there can only be 624 bits in binary     |
+            let round = Math.round(div)//                                                                  | strings.                                       |
+            let for_length = 0
+
+            if (round > div) {
+                for_length = (round * 8) - data.join("").length
+
+                for (let i = 0; i < for_length; i++) {
+                    data.push(0)
+                }
+            }
+            else {
+                for_length = ((round + 1) * 8) - data.join("").length
+
+                for (let i = 0; i < for_length; i++) {
+                    data.push(0)
+                }
+            }
+        }
+        else {
+        }
+    }
+    else {
+        return "Binary is to big"
+    }
+    loop = (640 - data.join("").length) / 8
+    for (let i = 0; i < loop; i++) {
+        if (data[-1] != "11101100" || "00010001") {
+            data.push("11101100")
+        }
+        else if (data[-1] == "11101100") {
+            data.push("00010001")
+        }
+        else if (data[-1] == "00010001") {
+            data.push("11101100")
+        }
+    }
+    return data.join("").length
+}
+
+console.log(data_endcoding("https://www.thonky.com/qr-code-tutorial/introduction"))

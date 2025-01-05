@@ -30,4 +30,5 @@ function char_count(num){//converts the link count into binary
     }
 
 }
-console.log(char_count(10000))
+let a="https://www.youtube.com/watch?v=ZizmvuZ3EFk&t=529s"
+console.log(char_count(a.length))

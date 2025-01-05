@@ -162,3 +162,4 @@ function to_binary(link) {//converts the link into binary
     }
 }
 console.log(to_binary("https://www.youtube.com/watch?v=ZizmvuZ3EFk&t=529s")[0].length)
+//to_binary("https://www.youtube.com/watch?v=ZizmvuZ3EFk&t=529s")
