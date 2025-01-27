@@ -22,7 +22,7 @@ function divied(term1, term2) {
         expo = Number(term1[0].split("x")[1][1]) - 1
     }
 
-    if (product == "x") {//------------------------------------
+    if (product == "0") {//------------------------------------
         return "x^" + expo//                                   |
     }//                                                         =====> If the answer suppose to be x^exopent but it print out 0x^exponent don't worry about I'll fix it later
     else {//                                                   |
@@ -62,14 +62,54 @@ function muiltiply(product, term2) {
         }
     }
     for (let i = 0; i < result.length; i++) {
-        if (result[i].includes("0") == true) {
+        if (result[i].includes("x^0") == true) {
+            console.log(500)
             result[i] = result[i].replace('0', "")
+        }
+        if(result[i][0]==0){
+            result[i]=result[i].replace("0","")
         }
     }
     return result
 
 }
-let x_term = x_extract('x^2', "x+2")
+
+
+function subtraction(term1,muiltiples){
+    if(muiltiples[0]==term1[0]){
+        return `${term1[1].split("x")[0]-muiltiples[1].split("x")[0]}x${term1[1].split("x")[1]}`
+    }
+}
+
+function poly(term1,term2){
+    let terms=x_extract(term1, term2)
+    const term1_const=x_extract(term1, term2)
+    let result=[]
+    
+    for(let i=0; i<term1_const[0].length-1;i++){
+        console.log(terms[0])
+        let apple=divied(terms[0],terms[1])
+        if(apple.includes("undefined")){
+            result.push(apple.split("x")[0])
+        }else{
+        result.push(apple)}
+        let orange=muiltiply(apple,terms[1])
+        let subdom=subtraction(terms[0],orange)
+        let pop=terms[0].shift()
+        terms[0][0]=subdom
+
+    }
+    for(let i=0; i<result.length;i++){
+        if(result[i].split("x")[0]>0&& result[i]!=result[0]){
+            result[i]=`+${result[i]}`
+        }
+    }
+    console.log(result.join(""))
+}
+let x_term = x_extract("x^2+5x+6", "x+2")
 //console.log(x_term[1][0].split("x")[0])
-console.log(muiltiply(divied(x_term[0], x_term[1]), x_term[1]))
 //console.log(divied(x_term[0],x_term[1]))
+//console.log(muiltiply(divied(x_term[0], x_term[1]), x_term[1]))
+//console.log((subtraction(x_term[0],muiltiply(divied(x_term[0], x_term[1]), x_term[1]))))
+
+poly("3x^4−5x^2+3", "x+2")
